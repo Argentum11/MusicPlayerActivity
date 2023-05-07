@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MusicPlayerActivity</string>
+    <string name="ambient_classical_guitar">ambient_classical_guitar</string>
+    <string name="eco_technology">eco_technology</string>
+    <string name="futuristic_beat">futuristic_beat</string>
+    <string name="modern_vlog">modern_vlog</string>
+    <string name="reflected_light">reflected_light</string>
+    <string name="defaultSong">dontdownloadthissong</string>
+    <string name="play_pause">播放/暫停</string>
+    <string name="stop">停止</string>
+</resources>
