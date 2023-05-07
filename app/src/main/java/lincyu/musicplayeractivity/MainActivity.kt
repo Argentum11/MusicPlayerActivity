@@ -1,23 +1,22 @@
 package lincyu.musicplayeractivity
 
+import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit  var player: MediaPlayer
     private lateinit var btnPlayAndPause : Button
     private lateinit var btnStop: Button
-    private val mapOfSongs = mapOf(R.raw.ambient_classical_guitar to "ambient classical guitar",
-        R.raw.eco_technology to "eco technology",
-        R.raw.futuristic_beat to "futuristic beat",
-        R.raw.modern_vlog to "modern vlog",
-        R.raw.reflected_light to "reflected light")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,30 +28,24 @@ class MainActivity : AppCompatActivity() {
         btnStop = findViewById(R.id.btn_stop)
         btnStop.setOnClickListener { stop() }
 
-        val songList  = mutableListOf<String>()
-        for(song in mapOfSongs){
-            songList.add(song.value)
-        }
-        val songs = songList.toTypedArray()
         val songListView = findViewById<ListView>(R.id.songList)
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, songs)
-        songListView.adapter = arrayAdapter
+
+        val songs = listOf(
+            ListItem(getString(R.string.ambient_classical_guitar), R.drawable.ambient_classical_guitar, R.raw.ambient_classical_guitar),
+            ListItem(getString(R.string.eco_technology), R.drawable.eco_technology, R.raw.eco_technology),
+            ListItem(getString(R.string.futuristic_beat), R.drawable.futuristic_beat, R.raw.futuristic_beat),
+            ListItem(getString(R.string.modern_vlog), R.drawable.modern_vlog, R.raw.modern_vlog),
+            ListItem(getString(R.string.reflected_light), R.drawable.reflected_light, R.raw.reflected_light)
+        )
+        val adapter = ListAdapter(this, songs)
+        songListView.adapter = adapter
+
         songListView.setOnItemClickListener { _, _, i, _ ->
             stop()
-            val songFileID = getSongFileId(songs[i])
-            setPlayerToSong(songFileID)
+            setPlayerToSong(songs[i].mp3ResId)
             start()
         }
         init()
-    }
-
-    private fun getSongFileId(songName:String):Int{
-        for(song in mapOfSongs){
-            if (song.value == songName){
-                return song.key
-            }
-        }
-        return R.string.defaultSong
     }
 
     override fun onDestroy() {
@@ -101,6 +94,29 @@ class MainActivity : AppCompatActivity() {
             player.prepare()
         } catch (e: Exception) {
             Log.e("player error", e.toString())
+        }
+    }
+
+    data class ListItem(val songName: String,val imageResId: Int, val mp3ResId:Int)
+    class ListAdapter(private val context: Context, private val items: List<ListItem>) :
+        ArrayAdapter<ListItem>(context, R.layout.list_item, items) {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
+            val item = items[position]
+
+            view.findViewById<ImageView>(R.id.image_view).setImageResource(item.imageResId)
+            view.findViewById<TextView>(R.id.songName).text = item.songName
+
+            /* get metadata */
+            val retriever = MediaMetadataRetriever()
+            val resourceId = item.mp3ResId
+            val uri = Uri.parse("android.resource://" + context.packageName + "/" + resourceId)
+            retriever.setDataSource(context, uri)
+            val artist: String? = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+            view.findViewById<TextView>(R.id.artist).text = artist
+
+            return view
         }
     }
 

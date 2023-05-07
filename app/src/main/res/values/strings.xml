@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">MusicPlayerActivity</string>
-    <string name="ambient_classical_guitar">ambient_classical_guitar</string>
-    <string name="eco_technology">eco_technology</string>
-    <string name="futuristic_beat">futuristic_beat</string>
-    <string name="modern_vlog">modern_vlog</string>
-    <string name="reflected_light">reflected_light</string>
-    <string name="defaultSong">dontdownloadthissong</string>
-    <string name="play_pause">播放/暫停</string>
-    <string name="stop">停止</string>
+    <string name="app_name" translatable="false">MusicPlayerActivity</string>
+    <string name="ambient_classical_guitar" translatable="false">ambient classical guitar</string>
+    <string name="eco_technology" translatable="false">eco technology</string>
+    <string name="futuristic_beat" translatable="false">futuristic beat</string>
+    <string name="modern_vlog" translatable="false">modern vlog</string>
+    <string name="reflected_light" translatable="false">reflected light</string>
+    <string name="defaultSong" translatable="false">dontdownloadthissong</string>
+    <string name="play_pause" translatable="false">播放/暫停</string>
+    <string name="stop" translatable="false">停止</string>
+    <string name="song_image">song image</string>
 </resources>
